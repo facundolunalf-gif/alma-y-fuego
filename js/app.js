@@ -171,52 +171,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // VISTA LIBRO (una categoría por página, se pasa con las flechas)
-  const libroPagina = $("#libroPagina");
-  const libroIndice = $("#libroIndice");
-  if (libroPagina && MENU.categorias) {
-    const paginas = MENU.categorias.map((cat) => catHTML(cat));
-    let actual = 0;
-    let animando = false;
-    const pintarIndice = () => { if (libroIndice) libroIndice.textContent = (actual + 1) + " / " + paginas.length; };
-    const irA = (i, dir) => {
-      if (animando) return;
-      i = (i + paginas.length) % paginas.length;
-      if (i === actual) return;
-      animando = true;
-      libroPagina.style.transform = "rotateY(" + (dir < 0 ? 14 : -14) + "deg)";
-      libroPagina.style.opacity = "0";
-      setTimeout(() => {
-        actual = i;
-        libroPagina.innerHTML = paginas[actual];
-        libroPagina.scrollTop = 0;
-        libroPagina.style.transition = "none";
-        libroPagina.style.transform = "rotateY(" + (dir < 0 ? -14 : 14) + "deg)";
-        void libroPagina.offsetWidth;
-        libroPagina.style.transition = "";
-        libroPagina.style.transform = "rotateY(0deg)";
-        libroPagina.style.opacity = "1";
-        pintarIndice();
-        setTimeout(() => { animando = false; }, 260);
-      }, 230);
-    };
-    libroPagina.innerHTML = paginas[0];
-    pintarIndice();
-    const bp = $("#libroPrev"); if (bp) bp.addEventListener("click", () => irA(actual - 1, -1));
-    const bn = $("#libroNext"); if (bn) bn.addEventListener("click", () => irA(actual + 1, 1));
+  // --- Carta en ventana emergente (modal) ---
+  const modalCarta = $("#modalCarta");
+  const abrirCarta = $("#abrirCarta");
+  const abrir = () => { if (modalCarta) { modalCarta.hidden = false; document.body.style.overflow = "hidden"; } };
+  const cerrar = () => { if (modalCarta) { modalCarta.hidden = true; document.body.style.overflow = ""; } };
+  if (abrirCarta) abrirCarta.addEventListener("click", abrir);
+  if (modalCarta) {
+    modalCarta.querySelectorAll("[data-cerrar]").forEach((el) => el.addEventListener("click", cerrar));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrar(); });
   }
 
-  // TOGGLE de vista (Lista / Libro)
-  const modos = document.querySelectorAll(".modo");
-  const vistaLista = $("#vistaLista");
-  const vistaLibro = $("#vistaLibro");
-  const setModo = (modo) => {
-    modos.forEach((m) => m.classList.toggle("modo--activo", m.dataset.modo === modo));
-    if (vistaLista) vistaLista.hidden = modo !== "lista";
-    if (vistaLibro) vistaLibro.hidden = modo !== "libro";
-  };
-  modos.forEach((m) => m.addEventListener("click", () => setModo(m.dataset.modo)));
-  setModo(window.matchMedia("(min-width: 900px)").matches ? "libro" : "lista");
+  // --- Fotos: si una imagen falta, muestra un recuadro en su lugar ---
+  document.querySelectorAll("img[data-fallback]").forEach((img) => {
+    img.addEventListener("error", () => {
+      const dv = document.createElement("div");
+      dv.className = "foto-slot";
+      dv.setAttribute("data-slot", img.getAttribute("data-fallback"));
+      if (img.parentNode) img.parentNode.replaceChild(dv, img);
+    });
+  });
 
   /* ========================================================================
      4) INTERACCIONES (menú móvil, barra al hacer scroll)

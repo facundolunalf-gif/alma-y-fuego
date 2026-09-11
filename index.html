@@ -84,31 +84,11 @@
         <p>Del fuego a tu mesa. Todo lo que servimos, en un solo lugar.</p>
       </div>
 
-      <!-- Elegí cómo ver la carta: Lista (práctica) o Libro (pasa páginas) -->
-      <div class="carta__modos" role="tablist" aria-label="Vista de la carta">
-        <button class="modo modo--activo" data-modo="lista">Lista</button>
-        <button class="modo" data-modo="libro">Libro</button>
+      <!-- La carta se abre en una ventana emergente al tocar el botón -->
+      <div class="carta__cta">
+        <button class="boton boton--brasa boton--grande" id="abrirCarta">Ver la carta completa</button>
+        <p class="carta__cubierto">Cubierto <span data-config="cubierto">$3.500</span> por persona</p>
       </div>
-
-      <!-- VISTA LISTA (solapas + platos, se completan desde menu.js) -->
-      <div class="carta__vista" id="vistaLista">
-        <div class="carta__solapas" id="solapasCarta" role="tablist" aria-label="Categorías de la carta"></div>
-        <div class="carta__cuerpo" id="cuerpoCarta"></div>
-      </div>
-
-      <!-- VISTA LIBRO (una categoría por página, se pasa con las flechas) -->
-      <div class="carta__vista" id="vistaLibro" hidden>
-        <div class="libro">
-          <div class="libro__pagina" id="libroPagina"></div>
-        </div>
-        <div class="libro__controles">
-          <button class="libro__nav" id="libroPrev" aria-label="Página anterior">‹</button>
-          <span class="libro__indice" id="libroIndice"></span>
-          <button class="libro__nav" id="libroNext" aria-label="Página siguiente">›</button>
-        </div>
-      </div>
-
-      <p class="carta__cubierto">Cubierto <span data-config="cubierto">$3.500</span> por persona</p>
     </div>
   </section>
 
@@ -121,7 +101,7 @@
       </div>
       <!-- Espacio para una foto del local o de la parrilla. Reemplazá el
            contenido de .foto-slot por: <img src="img/local.jpg" alt="..."> -->
-      <div class="nosotros__foto foto-slot" data-slot="Foto del local o de la parrilla"></div>
+      <img class="nosotros__foto" src="img/interior.jpg" alt="Salón de Alma y Fuego" loading="lazy" data-fallback="Foto del local" />
     </div>
   </section>
 
@@ -130,18 +110,20 @@
     <div class="contenedor">
       <div class="titulo-seccion">
         <h2>Galería</h2>
-        <p>Poné acá tus mejores fotos de platos, cortes y del salón.</p>
+        <p>Platos, cortes y el salón de Alma y Fuego.</p>
       </div>
       <!-- Cada recuadro es un lugar para una foto. Para poner una foto real,
            reemplazá  <div class="foto-slot" ...></div>  por  <img src="img/foto1.jpg" alt="...">
            Podés agregar o quitar recuadros libremente. -->
       <div class="galeria__grilla">
-        <div class="foto-slot" data-slot="Corte a la parrilla"></div>
-        <div class="foto-slot" data-slot="Provoleta"></div>
-        <div class="foto-slot" data-slot="Salón"></div>
-        <div class="foto-slot" data-slot="Pastas caseras"></div>
-        <div class="foto-slot" data-slot="Postre"></div>
-        <div class="foto-slot" data-slot="Copa de vino"></div>
+        <img src="img/asado.jpg" alt="Asado a la parrilla" loading="lazy" data-fallback="Asado" />
+        <img src="img/mollejas.jpg" alt="Mollejas" loading="lazy" data-fallback="Mollejas" />
+        <img src="img/provoleta.jpg" alt="Provoleta" loading="lazy" data-fallback="Provoleta" />
+        <img src="img/sorrentinos.jpg" alt="Sorrentinos" loading="lazy" data-fallback="Sorrentinos" />
+        <img src="img/ensalada.jpg" alt="Ensalada" loading="lazy" data-fallback="Ensalada" />
+        <img src="img/carne-papas.jpg" alt="Carne con papas" loading="lazy" data-fallback="Carne con papas" />
+        <img src="img/salmon.jpg" alt="Salmón" loading="lazy" data-fallback="Salmón" />
+        <img src="img/cava.jpg" alt="Nuestra cava" loading="lazy" data-fallback="Cava" />
       </div>
     </div>
   </section>
@@ -248,6 +230,21 @@
       <span>© <span id="anio"></span> Alma y Fuego</span>
     </div>
   </footer>
+
+  <!-- =====================  VENTANA EMERGENTE: LA CARTA  ===================== -->
+  <div class="modal" id="modalCarta" hidden>
+    <div class="modal__fondo" data-cerrar></div>
+    <div class="modal__caja" role="dialog" aria-modal="true" aria-label="Nuestra carta">
+      <div class="modal__barra">
+        <span class="modal__titulo">Nuestra carta</span>
+        <button class="modal__cerrar" data-cerrar aria-label="Cerrar la carta">&times;</button>
+      </div>
+      <div class="modal__scroll">
+        <div class="carta__solapas" id="solapasCarta" role="tablist" aria-label="Categorías de la carta"></div>
+        <div class="carta__cuerpo" id="cuerpoCarta"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Botón flotante de WhatsApp (siempre visible) -->
   <a class="wpp-flotante" id="wppFlotante" href="#" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">

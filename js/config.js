@@ -28,13 +28,13 @@ const CONFIG = {
   email: "[COMPLETAR: hola@almayfuego.com.ar]",
 
   // ---- Dirección ----------------------------------------------------------
-  direccion: "[COMPLETAR: Calle y número]",
-  ciudad: "[COMPLETAR: Barrio, Ciudad]",
+  direccion: "Av. Rivadavia 10399",
+  ciudad: "Villa Luro, CABA",
 
   // Mapa de Google:
   // 1) Buscá el local en Google Maps  2) Compartir > Insertar un mapa
   // 3) Copiá SOLO el enlace que está dentro de src="..." y pegalo acá.
-  mapaEmbed: "",
+  mapaEmbed: "https://www.google.com/maps?q=Av.+Rivadavia+10399,+Villa+Luro,+CABA&output=embed",
 
   // ---- Redes --------------------------------------------------------------
   instagram: "https://www.instagram.com/almayfuegoresto",
@@ -56,6 +56,17 @@ const CONFIG = {
   nosotros: [
     "Alma y Fuego nació de una idea simple: que el asado vuelva a ser un punto de encuentro. Cortes elegidos, brasas de verdad y una cocina que respeta la tradición argentina sin apuro.",
     "Además de la parrilla, tenemos pastas caseras, una cava pensada con cariño y una cafetería para las tardes. Un lugar para quedarse.",
+  ],
+
+  // ---- Reseñas de clientes (Google) ---------------------------------------
+  // Para agregar una: copiá una línea entera y editala. estrellas va de 1 a 5.
+  reseñas: [
+    { nombre: "Karina Masi", estrellas: 5, cuando: "Hace un mes", texto: "Excelente, la comida abundante y riquísima. Fuimos varias personas y quedaron todas encantadas. ¡Expectativa vs. realidad, espectacular!" },
+    { nombre: "Marina Fiorenza", estrellas: 5, cuando: "Hace un mes", texto: "Hermoso lugar, súper recomendable. Excelente atención de las chicas y la comida riquísima. Comimos el menú, platos abundantes. ¡Volveremos!" },
+    { nombre: "Lily Loiacono", estrellas: 5, cuando: "Hace un mes", texto: "Un excelente lugar, totalmente recomendable. Exquisita comida, con porciones abundantes. El ambiente es muy cálido por la perfecta atención que brindan." },
+    { nombre: "Griselda", estrellas: 5, cuando: "Local Guide", texto: "Precioso restaurante, súper bien atendido. Compartimos un menú ejecutivo: el bife estaba espectacular, carne tierna en su mejor punto, y la bocha de helado, generosa. Lo recomiendo." },
+    { nombre: "Petunia", estrellas: 5, cuando: "Local Guide", texto: "Un lugar perfecto para cenar o almorzar. Muy rica comida, tanto de parrilla como de pastas, con opciones vegetarianas. La atención es impecable y el ambiente muy agradable." },
+    { nombre: "Camila Mazondo", estrellas: 5, cuando: "Local Guide", texto: "Muy buena experiencia. Pedimos el vacío fino y las mollejas, ambos riquísimos y de muy buena calidad. El lugar es realmente hermoso. Sin duda volveremos." },
   ],
 
 };

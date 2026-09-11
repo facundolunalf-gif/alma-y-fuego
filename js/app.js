@@ -71,6 +71,21 @@ document.addEventListener("DOMContentLoaded", function () {
       '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de Alma y Fuego"></iframe>';
   }
 
+  // Reseñas de clientes
+  const cajaResenas = $("#cajaResenas");
+  if (cajaResenas && Array.isArray(CONFIG["reseñas"])) {
+    cajaResenas.innerHTML = CONFIG["reseñas"].map((r) => {
+      const n = Math.max(0, Math.min(5, r.estrellas || 5));
+      const estrellas = "★".repeat(n) + "☆".repeat(5 - n);
+      return '<figure class="resena">' +
+        '<div class="resena__estrellas" aria-label="' + n + ' de 5">' + estrellas + "</div>" +
+        '<blockquote class="resena__texto">' + seguro(r.texto) + "</blockquote>" +
+        '<figcaption class="resena__pie"><span class="resena__nombre">' + seguro(r.nombre) + "</span>" +
+        (r.cuando ? '<span class="resena__cuando">' + seguro(r.cuando) + "</span>" : "") +
+        "</figcaption></figure>";
+    }).join("");
+  }
+
   // Año actual en el pie
   const anio = $("#anio"); if (anio) anio.textContent = new Date().getFullYear();
 
@@ -106,48 +121,45 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* ========================================================================
-     3) LA CARTA (solapas + platos, desde menu.js)
+     3) LA CARTA (dos vistas: Lista y Libro, desde menu.js)
   ======================================================================== */
+
+  // Arma el contenido HTML de una categoría (se reutiliza en las dos vistas)
+  const catHTML = (cat) => {
+    let html = '<div class="carta__panel-titulo"><h3>' + seguro(cat.nombre) + "</h3>";
+    if (cat.subtitulo) html += "<p>" + seguro(cat.subtitulo) + "</p>";
+    html += '</div><div class="carta__grupos">';
+    (cat.grupos || []).forEach((g) => {
+      html += '<div class="grupo"><h4 class="grupo__titulo">' + seguro(g.titulo) + "</h4>";
+      if (g.nota) html += '<p class="grupo__nota">' + seguro(g.nota) + "</p>";
+      (g.items || []).forEach((it) => {
+        html += '<div class="item"><div><span class="item__nombre">' + seguro(it.nombre) + "</span>";
+        if (it.detalle) html += '<span class="item__detalle">' + seguro(it.detalle) + "</span>";
+        html += "</div>";
+        html += '<span class="item__puntos"></span>';
+        html += '<span class="item__precio">' + seguro(it.precio) + "</span></div>";
+      });
+      html += "</div>";
+    });
+    html += "</div>";
+    return html;
+  };
+
+  // VISTA LISTA (solapas + paneles)
   const solapas = $("#solapasCarta");
   const cuerpo = $("#cuerpoCarta");
-
   if (solapas && cuerpo && MENU.categorias) {
     MENU.categorias.forEach((cat, i) => {
-
-      // --- Solapa (botón de arriba) ---
       const btn = crear("button", "solapa" + (i === 0 ? " solapa--activa" : ""));
       btn.textContent = cat.nombre;
       btn.setAttribute("role", "tab");
       btn.dataset.destino = cat.id;
       solapas.appendChild(btn);
-
-      // --- Panel de contenido ---
       const panel = crear("div", "carta__panel" + (i === 0 ? " carta__panel--activo" : ""));
       panel.id = "panel-" + cat.id;
-
-      let html = '<div class="carta__panel-titulo"><h3>' + seguro(cat.nombre) + "</h3>";
-      if (cat.subtitulo) html += "<p>" + seguro(cat.subtitulo) + "</p>";
-      html += '</div><div class="carta__grupos">';
-
-      (cat.grupos || []).forEach((g) => {
-        html += '<div class="grupo"><h4 class="grupo__titulo">' + seguro(g.titulo) + "</h4>";
-        if (g.nota) html += '<p class="grupo__nota">' + seguro(g.nota) + "</p>";
-        (g.items || []).forEach((it) => {
-          html += '<div class="item"><div><span class="item__nombre">' + seguro(it.nombre) + "</span>";
-          if (it.detalle) html += '<span class="item__detalle">' + seguro(it.detalle) + "</span>";
-          html += "</div>";
-          html += '<span class="item__puntos"></span>';
-          html += '<span class="item__precio">' + seguro(it.precio) + "</span></div>";
-        });
-        html += "</div>";
-      });
-
-      html += "</div>";
-      panel.innerHTML = html;
+      panel.innerHTML = catHTML(cat);
       cuerpo.appendChild(panel);
     });
-
-    // --- Cambio de solapa ---
     solapas.addEventListener("click", (e) => {
       const btn = e.target.closest(".solapa");
       if (!btn) return;
@@ -158,6 +170,53 @@ document.addEventListener("DOMContentLoaded", function () {
       if (panel) panel.classList.add("carta__panel--activo");
     });
   }
+
+  // VISTA LIBRO (una categoría por página, se pasa con las flechas)
+  const libroPagina = $("#libroPagina");
+  const libroIndice = $("#libroIndice");
+  if (libroPagina && MENU.categorias) {
+    const paginas = MENU.categorias.map((cat) => catHTML(cat));
+    let actual = 0;
+    let animando = false;
+    const pintarIndice = () => { if (libroIndice) libroIndice.textContent = (actual + 1) + " / " + paginas.length; };
+    const irA = (i, dir) => {
+      if (animando) return;
+      i = (i + paginas.length) % paginas.length;
+      if (i === actual) return;
+      animando = true;
+      libroPagina.style.transform = "rotateY(" + (dir < 0 ? 14 : -14) + "deg)";
+      libroPagina.style.opacity = "0";
+      setTimeout(() => {
+        actual = i;
+        libroPagina.innerHTML = paginas[actual];
+        libroPagina.scrollTop = 0;
+        libroPagina.style.transition = "none";
+        libroPagina.style.transform = "rotateY(" + (dir < 0 ? -14 : 14) + "deg)";
+        void libroPagina.offsetWidth;
+        libroPagina.style.transition = "";
+        libroPagina.style.transform = "rotateY(0deg)";
+        libroPagina.style.opacity = "1";
+        pintarIndice();
+        setTimeout(() => { animando = false; }, 260);
+      }, 230);
+    };
+    libroPagina.innerHTML = paginas[0];
+    pintarIndice();
+    const bp = $("#libroPrev"); if (bp) bp.addEventListener("click", () => irA(actual - 1, -1));
+    const bn = $("#libroNext"); if (bn) bn.addEventListener("click", () => irA(actual + 1, 1));
+  }
+
+  // TOGGLE de vista (Lista / Libro)
+  const modos = document.querySelectorAll(".modo");
+  const vistaLista = $("#vistaLista");
+  const vistaLibro = $("#vistaLibro");
+  const setModo = (modo) => {
+    modos.forEach((m) => m.classList.toggle("modo--activo", m.dataset.modo === modo));
+    if (vistaLista) vistaLista.hidden = modo !== "lista";
+    if (vistaLibro) vistaLibro.hidden = modo !== "libro";
+  };
+  modos.forEach((m) => m.addEventListener("click", () => setModo(m.dataset.modo)));
+  setModo(window.matchMedia("(min-width: 900px)").matches ? "libro" : "lista");
 
   /* ========================================================================
      4) INTERACCIONES (menú móvil, barra al hacer scroll)

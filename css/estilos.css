@@ -202,6 +202,38 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
 .carta__cubierto { text-align: center; color: var(--humo); margin-top: 54px; font-size: 0.9rem; }
 .carta__cubierto span { color: var(--laton); font-weight: 600; }
 
+/* Vistas de la carta: toggle Lista / Libro */
+.carta__modos { display: flex; justify-content: center; gap: 8px; margin-bottom: 40px; }
+.modo { background: none; border: 1px solid var(--linea); color: var(--humo); font-family: var(--sans); font-weight: 600; font-size: 0.92rem; padding: 9px 22px; border-radius: 40px; cursor: pointer; transition: color .2s, background-color .2s, border-color .2s; }
+.modo:hover { color: var(--ceniza); }
+.modo--activo { color: #fff; background: var(--brasa); border-color: var(--brasa); }
+.carta__vista[hidden] { display: none; }
+
+/* Vista libro (pasa páginas) */
+.libro { perspective: 2000px; }
+.libro__pagina {
+  background: var(--carbon-2);
+  border: 1px solid var(--linea);
+  border-left: 3px solid var(--brasa);
+  border-radius: 4px;
+  padding: 46px 44px;
+  min-height: 58vh;
+  max-height: 76vh;
+  overflow-y: auto;
+  transform-origin: left center;
+  transition: transform .23s ease, opacity .23s ease;
+  box-shadow: 0 28px 70px rgba(0,0,0,0.45);
+}
+.libro__pagina .carta__panel-titulo { margin-bottom: 30px; }
+.libro__controles { display: flex; align-items: center; justify-content: center; gap: 26px; margin-top: 26px; }
+.libro__nav {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--carbon-2); border: 1px solid var(--linea); color: var(--ceniza);
+  font-size: 1.7rem; line-height: 1; cursor: pointer; transition: background-color .2s, border-color .2s, color .2s;
+}
+.libro__nav:hover { background: var(--brasa); border-color: var(--brasa); color: #fff; }
+.libro__indice { color: var(--humo); font-variant-numeric: tabular-nums; min-width: 64px; text-align: center; }
+
 /* =====================  NOSOTROS  ===================== */
 .nosotros { padding: 90px 0; background: var(--carbon-2); border-top: 1px solid var(--linea); }
 .nosotros__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
@@ -226,6 +258,19 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
 .foto-slot[data-slot]::after { content: "📷"; display: block; }
 .foto-slot { flex-direction: column; gap: 8px; }
 
+/* =====================  RESEÑAS  ===================== */
+.resenas { padding: 90px 0; }
+.resenas__grilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.resena {
+  background: var(--carbon-2); border: 1px solid var(--linea); border-radius: 4px;
+  padding: 26px; display: flex; flex-direction: column; gap: 14px;
+}
+.resena__estrellas { color: var(--laton); letter-spacing: 2px; font-size: 0.95rem; }
+.resena__texto { color: var(--ceniza); font-family: var(--serif); font-style: italic; line-height: 1.55; font-size: 1.02rem; }
+.resena__pie { display: flex; flex-direction: column; margin-top: auto; }
+.resena__nombre { color: var(--ceniza); font-weight: 600; }
+.resena__cuando { color: var(--humo); font-size: 0.85rem; }
+
 /* =====================  INSTAGRAM  ===================== */
 .insta { padding: 80px 0; background: var(--carbon-2); border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
 .insta__caja { text-align: center; max-width: 520px; margin: 0 auto; }
@@ -245,7 +290,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
 .reservas__datos a:hover { color: var(--brasa-viva); }
 
 .reservas__form { background: var(--carbon-2); border: 1px solid var(--linea); border-radius: 4px; padding: 28px; display: grid; gap: 16px; }
-.reservas__form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--humo); font-weight: 600; }
+.reservas__form label { display: flex; flex-direccion: column; gap: 6px; font-size: 0.85rem; color: var(--humo); font-weight: 600; }
 .reservas__form input, .reservas__form textarea {
   font-family: var(--sans); font-size: 1rem; color: var(--ceniza);
   background: var(--carbon); border: 1px solid var(--linea); border-radius: 3px; padding: 11px 13px;
@@ -295,6 +340,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
   .reservas__grid,
   .ubicacion__grid { grid-template-columns: 1fr; gap: 40px; }
   .ubicacion__mapa { min-height: 300px; }
+  .resenas__grilla { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 760px) {
@@ -318,6 +364,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
   .galeria__grilla { grid-template-columns: repeat(2, 1fr); }
   .eje__lista { columns: 1; }
   .pie__grid { grid-template-columns: 1fr; gap: 30px; }
+  .resenas__grilla { grid-template-columns: 1fr; }
+  .libro__pagina { padding: 28px 22px; max-height: 82vh; }
 }
 
 /* =====================  ACCESIBILIDAD: menos movimiento  ===================== */

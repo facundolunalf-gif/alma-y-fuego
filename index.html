@@ -40,6 +40,7 @@
         <a href="#carta">Carta</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#galeria">Galería</a>
+        <a href="#resenas">Reseñas</a>
         <a href="#ubicacion">Dónde estamos</a>
         <a href="#reservas" class="boton boton--brasa">Reservar</a>
       </nav>
@@ -83,11 +84,29 @@
         <p>Del fuego a tu mesa. Todo lo que servimos, en un solo lugar.</p>
       </div>
 
-      <!-- Solapas de categorías (se completan solas desde menu.js) -->
-      <div class="carta__solapas" id="solapasCarta" role="tablist" aria-label="Categorías de la carta"></div>
+      <!-- Elegí cómo ver la carta: Lista (práctica) o Libro (pasa páginas) -->
+      <div class="carta__modos" role="tablist" aria-label="Vista de la carta">
+        <button class="modo modo--activo" data-modo="lista">Lista</button>
+        <button class="modo" data-modo="libro">Libro</button>
+      </div>
 
-      <!-- Contenido de la carta (se completa solo desde menu.js) -->
-      <div class="carta__cuerpo" id="cuerpoCarta"></div>
+      <!-- VISTA LISTA (solapas + platos, se completan desde menu.js) -->
+      <div class="carta__vista" id="vistaLista">
+        <div class="carta__solapas" id="solapasCarta" role="tablist" aria-label="Categorías de la carta"></div>
+        <div class="carta__cuerpo" id="cuerpoCarta"></div>
+      </div>
+
+      <!-- VISTA LIBRO (una categoría por página, se pasa con las flechas) -->
+      <div class="carta__vista" id="vistaLibro" hidden>
+        <div class="libro">
+          <div class="libro__pagina" id="libroPagina"></div>
+        </div>
+        <div class="libro__controles">
+          <button class="libro__nav" id="libroPrev" aria-label="Página anterior">‹</button>
+          <span class="libro__indice" id="libroIndice"></span>
+          <button class="libro__nav" id="libroNext" aria-label="Página siguiente">›</button>
+        </div>
+      </div>
 
       <p class="carta__cubierto">Cubierto <span data-config="cubierto">$3.500</span> por persona</p>
     </div>
@@ -124,6 +143,18 @@
         <div class="foto-slot" data-slot="Postre"></div>
         <div class="foto-slot" data-slot="Copa de vino"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- =====================  RESEÑAS  ===================== -->
+  <section class="resenas" id="resenas">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <h2>Lo que dicen</h2>
+        <p>Reseñas reales de clientes en Google.</p>
+      </div>
+      <!-- Se completa solo desde config.js (bloque "reseñas") -->
+      <div class="resenas__grilla" id="cajaResenas"></div>
     </div>
   </section>
 
